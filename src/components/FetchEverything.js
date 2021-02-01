@@ -14,9 +14,6 @@ const FetchMovies = (category, page) => {
         console.log("Movies fetching error");
       }
     })
-    .then((data) =>{
-        return data;
-    })
 }
 
 const FetchDetails = (id) => {
@@ -25,7 +22,7 @@ const FetchDetails = (id) => {
       if (resp.ok) {
         return resp.json();
       } else {
-        console.log("Companies fetching error");
+        console.log("Details fetching error");
       }
     })
 }

@@ -1,16 +1,20 @@
 import './App.css';
+import { Route, Switch, withRouter } from "react-router-dom";
 import Header from "./components/Header";
-import Button from "./components/Button";
 import MoviePage from "./components/MoviesPage";
-import styled from "styled-components";
+import DetailsPage from "./components/DetailsPage";
 
-function App() {
+
+const App = withRouter((props) => {
   return (
     <div className="App">
       <Header/>
-      <MoviePage/>
+      <Switch>
+      <Route path="/movies/:movieId" component={DetailsPage}/>
+        <Route path="/" component={MoviePage}/>
+      </Switch>
     </div>
   );
-}
+})
 
 export default App;

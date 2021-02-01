@@ -2,6 +2,7 @@ import React from "react";
 import { IoIosHeartEmpty, IoMdHeart, IoIosStar } from "react-icons/io";
 import styled from "styled-components";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 const IMAGE_URL = "https://image.tmdb.org/t/p/w500";
 
@@ -15,12 +16,21 @@ const MovieContainer = ({
   return (
     <div className={className}>
       <div className="movie-container" id={id}>
-        <img className="movie-image" src={`${IMAGE_URL}/${poster_path}`} />
-        <button className="title-button">
-          <div className="title-div">
-            <h2 className="movie-title">{title}</h2>
-          </div>
-        </button>
+        <img
+          className="movie-image"
+          src={
+            poster_path !== null
+              ? `${IMAGE_URL}/${poster_path}`
+              : "https://t4.ftcdn.net/jpg/02/07/87/79/360_F_207877921_BtG6ZKAVvtLyc5GWpBNEIlIxsffTtWkv.jpg"
+          }
+        />
+        <Link to={`movies/${id}`}>
+          <button className="title-button">
+            <div className="title-div">
+              <h2 className="movie-title">{title}</h2>
+            </div>
+          </button>
+        </Link>
         <div className="icon-area">
           <div className="star-div">
             <IoIosStar className="star-icon" />

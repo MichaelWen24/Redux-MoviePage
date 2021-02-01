@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FetchMovies, FetchDetails } from "./FetchEverything";
+import { Route, Switch, withRouter } from "react-router-dom";
 import Button from "./Button";
 import styled from "styled-components";
 import MovieContianer from "./MovieContainer";
@@ -18,7 +19,7 @@ const MoviesPage = (props) => {
   };
 
   const handleNext = () => {
-    if (page < 500) {
+    if (page < totalPage) {
       setPage(page + 1);
     }
   };
@@ -49,6 +50,7 @@ const MoviesPage = (props) => {
               defaultValue="popular"
               onChange={(e) => {
                 setCategory(e.target.value);
+                setPage(1);
               }}
             >
               <option value="popular">Popular</option>
@@ -60,7 +62,6 @@ const MoviesPage = (props) => {
         </div>
       </div>
       <div className="movie-page">
-        {console.log(movieList)}
         {movieList.map(({ id, poster_path, title, vote_average }) => {
             return(
                 <MovieContianer key={id} id={id} poster_path={poster_path} title={title} vote_average={vote_average}/>
