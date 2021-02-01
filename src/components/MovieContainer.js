@@ -24,11 +24,9 @@ const MovieContainer = ({
               : "https://t4.ftcdn.net/jpg/02/07/87/79/360_F_207877921_BtG6ZKAVvtLyc5GWpBNEIlIxsffTtWkv.jpg"
           }
         />
-        <Link to={`movies/${id}`}>
+        <Link to={`movies/${id}`} style={{ textDecoration: "none" }}>
           <button className="title-button">
-            <div className="title-div">
-              <h2 className="movie-title">{title}</h2>
-            </div>
+            <h2 className="movie-title">{title}</h2>
           </button>
         </Link>
         <div className="icon-area">
@@ -50,7 +48,6 @@ const StyledMovieContainer = styled(MovieContainer)`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* align-items: center; */
     box-shadow: 5px 5px 5px 5px #888888;
   }
 
@@ -61,7 +58,6 @@ const StyledMovieContainer = styled(MovieContainer)`
   .title-button {
     width: 100%;
     height: 80px;
-    color: inherit;
     border: 0;
     cursor: pointer;
     margin: 0;
@@ -73,8 +69,12 @@ const StyledMovieContainer = styled(MovieContainer)`
     border-radius: 0;
     vertical-align: middle;
     justify-content: center;
-    text-decoration: none;
     background-color: transparent;
+  }
+
+  .title-button:hover {
+    background-color: rgb(240, 240, 240);
+    transition: 0.3s;
   }
 
   .star-icon {
