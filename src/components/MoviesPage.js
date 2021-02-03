@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FetchMovies, FetchDetails } from "./FetchEverything";
-import { Route, Switch, withRouter } from "react-router-dom";
+import { FetchMovies } from "./FetchEverything";
 import Button from "./Button";
 import styled from "styled-components";
 import MovieContianer from "./MovieContainer";

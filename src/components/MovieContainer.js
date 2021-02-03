@@ -1,8 +1,8 @@
 import React from "react";
 import { IoIosHeartEmpty, IoMdHeart, IoIosStar } from "react-icons/io";
 import styled from "styled-components";
-import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
 const IMAGE_URL = "https://image.tmdb.org/t/p/w500";
 
@@ -73,7 +73,7 @@ const StyledMovieContainer = styled(MovieContainer)`
   }
 
   .title-button:hover {
-    background-color: rgb(240, 240, 240);
+    background-color: rgb(230, 230, 230);
     transition: 0.3s;
   }
 

@@ -9,8 +9,6 @@ const IMAGE_URL = "https://image.tmdb.org/t/p/w500";
 
 const DetailsPage = (props) => {
   const [details, setDetails] = useState([]);
-  const [genres, setGenres] = useState([]);
-  const [companies, setCompanies] = useState([]);
 
   useEffect(() => {
     const movieId = props.match.params.movieId;
@@ -18,8 +16,6 @@ const DetailsPage = (props) => {
       const data = await FetchDetails(movieId);
       console.log(data);
       setDetails(data);
-      setGenres(data.genres);
-      setCompanies(data.production_companies);
     };
     fetchDetails();
   }, []);
@@ -45,9 +41,13 @@ const DetailsPage = (props) => {
         <div className="detail-genres">
           <h3>Genres:</h3>
           <div class="genre-container">
-            {genres.map((genre) => {
-              return <label class="genre-item">{genre.name}</label>;
-            })}
+            {details.genres ? (
+              details.genres.map((genre) => {
+                return <label class="genre-item">{genre.name}</label>;
+              })
+            ) : (
+              <label> genres null</label>
+            )}
           </div>
         </div>
         <div className="detail-rating">
@@ -60,7 +60,7 @@ const DetailsPage = (props) => {
         <div className="datail-your-rating">
           <h3>Your Rating:</h3>
           <div className="your-rating-area">
-            <select className="your-rating"defaultValue="1">
+            <select className="your-rating" defaultValue="1">
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -78,18 +78,21 @@ const DetailsPage = (props) => {
         <div className="detail-company">
           <h3>Production companies:</h3>
           <div class="company-container">
-            {companies.map((company) => {
-              console.log(company);
-              return (
-                <div class="company">
-                  <img
-                    className="company-image"
-                    src={`${IMAGE_URL}/${company.logo_path}`}
-                  />
-                  <p>{company.name}</p>
-                </div>
-              );
-            })}
+            {details.production_companies ? (
+              details.production_companies.map((company) => {
+                return (
+                  <div class="company">
+                    <img
+                      className="company-image"
+                      src={`${IMAGE_URL}/${company.logo_path}`}
+                    />
+                    <p>{company.name}</p>
+                  </div>
+                );
+              })
+            ) : (
+              <div>Company error</div>
+            )}
           </div>
         </div>
       </div>
@@ -155,7 +158,7 @@ const StyledDetailsPage = styled(DetailsPage)`
   }
 
   .rating-area {
-      display: flex;
+    display: flex;
   }
 
   .star-icon {
@@ -166,6 +169,7 @@ const StyledDetailsPage = styled(DetailsPage)`
 
   .your-rating {
     margin-right: 10px;
+    cursor: pointer;
   }
 
   .rating-button {

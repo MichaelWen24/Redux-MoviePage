@@ -6,6 +6,7 @@ export default styled.button`
   padding: 10px 16px;
   border-radius: 5px;
   font-size: 15px;
+  cursor: pointer;
   :hover {
     background-color: rgba(0, 0, 0, 0.05);
   }
