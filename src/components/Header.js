@@ -1,8 +1,36 @@
-import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
+import { SessionIdContext} from "../context/SessionIdContext"
+import React, { useContext, useEffect } from "react";
+import Button from "./Button";
+
 
 function Header(props) {
+  const { user, setUser } = useContext(UserContext);
+  const { sessionId, setSessionId } = useContext(SessionIdContext);
+
+  const onLoad = () => {
+    if (localStorage.getItem("sessionId") !== null && localStorage.getItem("user") !== null && localStorage.getItem("userId") !== null && user.name === "") {
+      setUser({name:localStorage.getItem("user"), id: localStorage.getItem("userId")});
+      console.log(localStorage.getItem("user"))
+      setSessionId(localStorage.getItem("sessionId"));
+    }
+    else {
+      return;
+    }
+  }
+
+  useEffect(() => {
+    onLoad();
+  }, [user])
+
+  const handleLogout = () => {
+    setUser({name: "", id: ""});
+    setSessionId("");
+    localStorage.clear();
+  }
+
   return (
     <div className={props.className}>
       <div className="title-container">
@@ -28,11 +56,19 @@ function Header(props) {
           </div>
         </Link>
       </div>
-      <Link to={`/login`} style={{ textDecoration: "none" }}>
+      
         <div className="account">
-          <h6>Login</h6>
+         {(user.name !== "") ? 
+         <div>
+          <Button className="logout-button" onClick={handleLogout}>Logout {user.name}</Button>
         </div>
+      :
+      <Link to={`/login`} style={{ textDecoration: "none" }}>
+        <h6>Login</h6>
       </Link>
+  }
+        </div>
+      
     </div>
   );
 }

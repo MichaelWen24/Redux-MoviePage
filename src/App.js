@@ -1,11 +1,11 @@
 import "./App.css";
 import { Route, Switch, withRouter } from "react-router-dom";
 import Header from "./components/Header";
-import MoviePage from "./components/MoviesPage";
-import DetailsPage from "./components/DetailsPage";
-import LoginPage from "./components/LoginPage";
-import FavoritePage from "./components/FavoritePage";
-import RatedPage from "./components/RatedPage";
+import MoviePage from "./containers/MoviesPage";
+import DetailsPage from "./containers/DetailsPage";
+import LoginPage from "./containers/LoginPage";
+import FavoritePage from "./containers/FavoritePage";
+import RatedPage from "./containers/RatedPage";
 
 const App = withRouter((props) => {
   return (

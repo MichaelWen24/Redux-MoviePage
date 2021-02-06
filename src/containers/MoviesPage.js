@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { FetchMovies } from "./FetchEverything";
-import Button from "./Button";
+import { fetchMovies } from "../components/FetchEverything";
+import Button from "../components/Button";
 import styled from "styled-components";
-import MovieContianer from "./MovieContainer";
+import MovieContainer from "../components/MovieContainer";
 // import { connect } from 'react-redux';
 
 const MoviesPage = (props) => {
@@ -25,11 +25,18 @@ const MoviesPage = (props) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await FetchMovies(category, page);
+      const data = await fetchMovies(category, page);
       setMovieList(data.results);
+      // setMovieList(
+      //   [...movieList, 
+      //     movieList[category][page]= data.results]
+      // )
       setTotalPage(data.total_pages);
     };
-    fetchData();
+    // console.log(movieList)
+    
+      fetchData();
+    
   }, [category, page]);
 
   return (
@@ -63,7 +70,7 @@ const MoviesPage = (props) => {
       <div className="movie-page">
         {movieList.map(({ id, poster_path, title, vote_average }) => {
             return(
-                <MovieContianer key={id} id={id} poster_path={poster_path} title={title} vote_average={vote_average}/>
+                <MovieContainer key={id} id={id} poster_path={poster_path} title={title} vote_average={vote_average}/>
             );
         })}
       </div>

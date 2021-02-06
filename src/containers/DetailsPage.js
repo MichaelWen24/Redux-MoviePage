@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { FetchDetails } from "../components/FetchEverything";
+import { fetchDetails } from "../components/FetchEverything";
 import { IoIosStar } from "react-icons/io";
-import Button from "./Button";
+import Button from "../components/Button";
 // import { Link, withRouter } from "react-router-dom";
 import styled from "styled-components";
 
@@ -12,12 +12,12 @@ const DetailsPage = (props) => {
 
   useEffect(() => {
     const movieId = props.match.params.movieId;
-    const fetchDetails = async () => {
-      const data = await FetchDetails(movieId);
-      console.log(data);
+    const FetchDetails = async () => {
+      const data = await fetchDetails(movieId);
+      console.log(data)
       setDetails(data);
     };
-    fetchDetails();
+    FetchDetails();
   }, []);
 
   return (
