@@ -1,7 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { fetchDetails } from "../components/FetchEverything";
+import React, { useState, useEffect, useContext } from "react";
+import {
+  fetchDetails,
+  fetchRatedMovie,
+  postRatedMovie,
+} from "../components/FetchEverything";
 import { IoIosStar } from "react-icons/io";
 import Button from "../components/Button";
+import { UserContext } from "../context/UserContext";
+import { SessionIdContext } from "../context/SessionIdContext";
 // import { Link, withRouter } from "react-router-dom";
 import styled from "styled-components";
 
@@ -9,15 +15,44 @@ const IMAGE_URL = "https://image.tmdb.org/t/p/w500";
 
 const DetailsPage = (props) => {
   const [details, setDetails] = useState([]);
+  const [rating, setRating] = useState(0);
+  const [curRating, setCurRating] = useState(0);
+  const { user } = useContext(UserContext);
+  const { sessionId } = useContext(SessionIdContext);
+
+  const FetchDetails = async (id) => {
+    const data = await fetchDetails(id);
+    setDetails(data);
+    return data;
+  };
+
+  const handleRating = () => {
+    const ratingValue = curRating;
+    const ratingRequestBody = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        value: ratingValue,
+      }),
+    };
+    setRating(ratingValue);
+    postRatedMovie(details.id, sessionId, ratingRequestBody).then((resp) => {
+      // if rated success, what message will show
+    });
+  };
 
   useEffect(() => {
     const movieId = props.match.params.movieId;
-    const FetchDetails = async () => {
-      const data = await fetchDetails(movieId);
-      console.log(data)
-      setDetails(data);
-    };
-    FetchDetails();
+
+    FetchDetails(movieId).then(({ id }) => {
+      fetchRatedMovie(user.id, sessionId).then(({ results }) => {
+        results.find((movie) => {
+          if (movie.id === id) {
+            setRating(movie.rating);
+          }
+        });
+      });
+    });
   }, []);
 
   return (
@@ -59,8 +94,13 @@ const DetailsPage = (props) => {
         </div>
         <div className="datail-your-rating">
           <h3>Your Rating:</h3>
+          {rating === undefined ? (
+            <p className="rating">0</p>
+          ) : (
+            <p className="rating">{rating} </p>
+          )}
           <div className="your-rating-area">
-            <select className="your-rating" defaultValue="1">
+            <select className="your-rating" defaultValue="1" onChange={(e) => setCurRating(e.target.value)}>
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -72,7 +112,9 @@ const DetailsPage = (props) => {
               <option value="9">9</option>
               <option value="10">10</option>
             </select>
-            <Button className="rating-button">RATE IT!</Button>
+            <Button className="rating-button" onClick={handleRating}>
+              RATE IT!
+            </Button>
           </div>
         </div>
         <div className="detail-company">

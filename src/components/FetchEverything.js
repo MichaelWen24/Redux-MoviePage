@@ -114,9 +114,9 @@ const fetchRatedMovie = (accountId, sessionId) => {
   });
 };
 
-const postRatedMovie = (movieId, sessionId) => {
+const postRatedMovie = (movieId, sessionId, body) => {
   return fetch(
-    `https://api.themoviedb.org/3/movie/${movieId}/rating?api_key=${API_KEY}&session_id=${sessionId}`
+    `https://api.themoviedb.org/3/movie/${movieId}/rating?api_key=${API_KEY}&session_id=${sessionId}`, body
   ).then((resp) => {
     if (resp.ok) {
       return resp.json();

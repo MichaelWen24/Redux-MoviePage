@@ -3,6 +3,7 @@ import { UserContext } from "../context/UserContext";
 import { SessionIdContext } from "../context/SessionIdContext";
 import MovieContainer from "../components/MovieContainer"
 import styled from "styled-components";
+import { fetchRatedMovie } from "../components/FetchEverything";
 // import { connect } from 'react-redux'
 
 export const RatedPage = (props) => {
@@ -12,15 +13,18 @@ export const RatedPage = (props) => {
   const [ratedList, setRatedList] = useState([]);
 
   useEffect(() => {
-      
-  })
+      fetchRatedMovie(user.id, sessionId).then((data) => {
+          setRatedList(data.results);
+      })
+  }, [])
 
   return (
   <div className={props.className}>
-      <div className="favorite-page">
-        {ratedList.map(({ id, poster_path, title, vote_average }) => {
+      <h2 className="title">Rated Page</h2>
+      <div className="rated-page">
+        {ratedList.map(({ id, poster_path, title, vote_average, rating }) => {
             return(
-                <MovieContainer key={id} id={id} poster_path={poster_path} title={title} vote_average={vote_average}/>
+                <MovieContainer key={id} id={id} poster_path={poster_path} title={title} vote_average={vote_average} rating={rating}/>
             );
         })}
       </div>
@@ -29,7 +33,14 @@ export const RatedPage = (props) => {
 };
 
 const StyledRatedPage = styled(RatedPage)`
-.favorite-page {
+.title {
+    margin-top: 32px;
+    text-align:center;
+    align-items:center;
+    font-size:32px;
+}
+
+.rated-page {
     display: grid;
     gap: 32px;
     grid-template-columns: repeat(4, 1fr);

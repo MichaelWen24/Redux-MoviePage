@@ -3,6 +3,7 @@ import { IoIosHeartEmpty, IoMdHeart, IoIosStar } from "react-icons/io";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { unstable_renderSubtreeIntoContainer } from "react-dom";
 
 const IMAGE_URL = "https://image.tmdb.org/t/p/w500";
 
@@ -12,6 +13,7 @@ const MovieContainer = ({
   poster_path,
   title,
   vote_average,
+  rating
 }) => {
   return (
     <div className={className}>
@@ -32,7 +34,8 @@ const MovieContainer = ({
         <div className="icon-area">
           <div className="star-div">
             <IoIosStar className="star-icon" />
-            <p className="vote">{vote_average}</p>
+            {rating === undefined ? <p className="vote">{vote_average}</p> : <p className="vote">{vote_average} / {rating}</p>}
+            
           </div>
           <div className="heart-div">
             <IoIosHeartEmpty className="heart-icon" />
