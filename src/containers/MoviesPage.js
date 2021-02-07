@@ -13,16 +13,6 @@ const MoviesPage = (props) => {
   const [totalPage, setTotalPage] = useState(500);
   const { isloading, setLoading } = useContext(LoadingContext);
 
-  // movieList = {
-  //   category: {
-  //     page: {
-  //       1:[]
-  //       2:[]
-  //        ...
-  //     }
-  //   }
-  // }
-
   const handlePrev = () => {
     if (page > 1) {
       setPage(page - 1);
@@ -36,7 +26,6 @@ const MoviesPage = (props) => {
   };
 
   useEffect(() => {
-    
     const fetchData = async () => {
       setLoading(true);
       const data = await fetchMovies(category, page);
