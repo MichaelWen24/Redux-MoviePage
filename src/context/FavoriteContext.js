@@ -51,6 +51,9 @@ export const FavoritProvider = (props) => {
             setFavoriteList(newFavoriteList);
           }
       }
+      else {
+          alert("Please Login")
+      }
   };
 
   const useFavorite = {
