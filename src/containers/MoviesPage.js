@@ -36,20 +36,22 @@ const MoviesPage = (props) => {
   };
 
   useEffect(() => {
+    
     const fetchData = async () => {
       setLoading(true);
       const data = await fetchMovies(category, page);
       setMovieList(data.results);
-      // setMovieList(
-      //   [...movieList.category,
-      //     movieList.category.page = data.results]
-      // )
       setTotalPage(data.total_pages);
       setLoading(false);
+      sessionStorage.setItem(`${category}${page}`, JSON.stringify(data.results))
     };
-    // console.log(movieList)
 
-    fetchData();
+    if (sessionStorage.getItem(`${category}${page}`) === null) {
+      fetchData();
+    }
+    else {
+      setMovieList(JSON.parse(sessionStorage.getItem(`${category}${page}`)));
+    }
   }, [category, page]);
 
   return (
