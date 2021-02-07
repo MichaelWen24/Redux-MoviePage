@@ -49,6 +49,7 @@ const DetailsPage = (props) => {
         results.find((movie) => {
           if (movie.id === id) {
             setRating(movie.rating);
+            return;
           }
         });
       });

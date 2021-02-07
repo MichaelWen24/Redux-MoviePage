@@ -14,8 +14,8 @@ import { fetchFavoriteMovie } from "../components/FetchEverything";
 
 const LoginPage = (props) => {
   const { user, setUser } = useContext(UserContext);
-  const { sessionId, setSessionId } = useContext(SessionIdContext);
-  const { favoriteList, setFavoriteList } = useContext(FavoriteContext);
+  const { setSessionId } = useContext(SessionIdContext);
+  const { setFavoriteList } = useContext(FavoriteContext);
   const [token, setToken] = useState([]);
   const [account, setAccount] = useState({
     username: "",
@@ -64,7 +64,6 @@ const LoginPage = (props) => {
     fetchTokenData();
     if (account.valid === true) {
       fetchSessionIdData().then((sessionID) => {
-        console.log("session in main", sessionID);
         setSessionId(sessionID);
         localStorage.setItem("sessionId", sessionID);
         fetchAccountDetails(sessionID)
@@ -75,11 +74,11 @@ const LoginPage = (props) => {
             localStorage.setItem("userId", accountData.id);
             //onLoad
             fetchFavoriteMovie(accountData.id, sessionID).then((data) => {
-              setFavoriteList(data.results)
-            })
+              setFavoriteList(data.results);
+            });
           })
           .then(() => {
-              history.push("/");
+            history.push("/");
           });
       });
     }

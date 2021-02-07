@@ -8,12 +8,11 @@ import Button from "./Button";
 
 function Header(props) {
   const { user, setUser } = useContext(UserContext);
-  const { sessionId, setSessionId } = useContext(SessionIdContext);
+  const { setSessionId } = useContext(SessionIdContext);
 
   const onLoad = () => {
     if (localStorage.getItem("sessionId") !== null && localStorage.getItem("user") !== null && localStorage.getItem("userId") !== null && user.name === "") {
       setUser({name:localStorage.getItem("user"), id: localStorage.getItem("userId")});
-      console.log(localStorage.getItem("user"))
       setSessionId(localStorage.getItem("sessionId"));
     }
     else {
