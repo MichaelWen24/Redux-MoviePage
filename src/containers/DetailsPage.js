@@ -8,8 +8,8 @@ import { IoIosStar } from "react-icons/io";
 import Button from "../components/Button";
 import { UserContext } from "../context/UserContext";
 import { SessionIdContext } from "../context/SessionIdContext";
-// import { Link, withRouter } from "react-router-dom";
 import styled from "styled-components";
+import { LoadingContext } from "../context/LoadingContext";
 
 const IMAGE_URL = "https://image.tmdb.org/t/p/w500";
 
@@ -19,6 +19,7 @@ const DetailsPage = (props) => {
   const [curRating, setCurRating] = useState(0);
   const { user } = useContext(UserContext);
   const { sessionId } = useContext(SessionIdContext);
+  const { isloading, setLoading } = useContext(LoadingContext);
 
   const FetchDetails = async (id) => {
     const data = await fetchDetails(id);
@@ -43,9 +44,10 @@ const DetailsPage = (props) => {
 
   useEffect(() => {
     const movieId = props.match.params.movieId;
-
+    setLoading(true);
     FetchDetails(movieId).then(({ id }) => {
       fetchRatedMovie(user.id, sessionId).then(({ results }) => {
+        setLoading(false);
         results.find((movie) => {
           if (movie.id === id) {
             setRating(movie.rating);
@@ -58,6 +60,7 @@ const DetailsPage = (props) => {
 
   return (
     <div className={props.className}>
+      {isloading && <h2>Loading</h2>}
       <div class="detail-img">
         <img src={`${IMAGE_URL}/${details.poster_path}`} />
       </div>
@@ -101,7 +104,11 @@ const DetailsPage = (props) => {
             <p className="rating">{rating} </p>
           )}
           <div className="your-rating-area">
-            <select className="your-rating" defaultValue="1" onChange={(e) => setCurRating(e.target.value)}>
+            <select
+              className="your-rating"
+              defaultValue="1"
+              onChange={(e) => setCurRating(e.target.value)}
+            >
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>

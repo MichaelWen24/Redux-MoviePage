@@ -5,23 +5,29 @@ import MovieContainer from "../components/MovieContainer";
 import styled from "styled-components";
 import { fetchFavoriteMovie } from "../components/FetchEverything";
 import { FavoriteContext } from "../context/FavoriteContext";
+import { LoadingContext } from "../context/LoadingContext";
+
 // import { connect } from 'react-redux'
 
 export const FavoritePage = (props) => {
   const { user } = useContext(UserContext);
   const { sessionId } = useContext(SessionIdContext);
   const { favoriteList, setFavoriteList } = useContext(FavoriteContext);
+  const { isloading, setLoading } = useContext(LoadingContext);
 
   useEffect(() => {
     if (user.name !== "") {
       fetchFavoriteMovie(user.id, sessionId).then((data) => {
+        setLoading(true);
         setFavoriteList(data.results);
+        setLoading(false);
       });
     }
   }, []);
 
   return (
     <div className={props.className}>
+      {isloading && <h2>Loading</h2>}
       <h2 className="title">Favorite Page</h2>
       {user.name !== "" ? (
         <div className="favorite-page">

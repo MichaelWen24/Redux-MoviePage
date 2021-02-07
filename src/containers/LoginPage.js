@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import {
   fetchToken,
@@ -11,12 +11,14 @@ import { UserContext } from "../context/UserContext";
 import { SessionIdContext } from "../context/SessionIdContext";
 import { FavoriteContext } from "../context/FavoriteContext";
 import { fetchFavoriteMovie } from "../components/FetchEverything";
+import { LoadingContext } from "../context/LoadingContext";
 
 const LoginPage = (props) => {
   const { user, setUser } = useContext(UserContext);
   const { setSessionId } = useContext(SessionIdContext);
   const { setFavoriteList } = useContext(FavoriteContext);
   const [token, setToken] = useState([]);
+  const { isloading, setLoading } = useContext(LoadingContext);
   const [account, setAccount] = useState({
     username: "",
     password: "",
@@ -26,6 +28,7 @@ const LoginPage = (props) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const accountRequestBody = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -75,6 +78,7 @@ const LoginPage = (props) => {
             //onLoad
             fetchFavoriteMovie(accountData.id, sessionID).then((data) => {
               setFavoriteList(data.results);
+              setLoading(false);
             });
           })
           .then(() => {
@@ -86,6 +90,7 @@ const LoginPage = (props) => {
 
   return (
     <div className={props.className}>
+      {isloading && <h2>Loading</h2>}
       <h3>Login</h3>
       <p
         className="login-error "
@@ -169,6 +174,11 @@ const StyledLoginPage = styled(LoginPage)`
   }
 
   .submit-container {
+    width: 100%;
+    margin-top: 15px;
+  }
+
+  .signup-container {
     width: 100%;
     margin-top: 15px;
   }

@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { fetchMovies } from "../components/FetchEverything";
 import Button from "../components/Button";
 import styled from "styled-components";
 import MovieContainer from "../components/MovieContainer";
+import { LoadingContext } from "../context/LoadingContext";
 // import { connect } from 'react-redux';
 
 const MoviesPage = (props) => {
@@ -10,6 +11,7 @@ const MoviesPage = (props) => {
   const [category, setCategory] = useState("popular");
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(500);
+  const { isloading, setLoading } = useContext(LoadingContext);
 
   // movieList = {
   //   category: {
@@ -20,7 +22,6 @@ const MoviesPage = (props) => {
   //     }
   //   }
   // }
-
 
   const handlePrev = () => {
     if (page > 1) {
@@ -36,22 +37,24 @@ const MoviesPage = (props) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       const data = await fetchMovies(category, page);
       setMovieList(data.results);
       // setMovieList(
-      //   [...movieList.category, 
+      //   [...movieList.category,
       //     movieList.category.page = data.results]
       // )
       setTotalPage(data.total_pages);
+      setLoading(false);
     };
     // console.log(movieList)
-    
-      fetchData();
-    
+
+    fetchData();
   }, [category, page]);
 
   return (
     <div className={props.className}>
+      {isloading && <h2>Loading</h2>}
       <div className="select-area">
         <div className="page-select">
           <Button onClick={handlePrev}> PREV </Button>
@@ -85,9 +88,7 @@ const MoviesPage = (props) => {
             );
         })} */}
         {movieList.map((movie) => {
-            return(
-                <MovieContainer key={movie.id} movie={movie} />
-            );
+          return <MovieContainer key={movie.id} movie={movie} />;
         })}
       </div>
     </div>

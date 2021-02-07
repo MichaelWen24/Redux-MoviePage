@@ -4,23 +4,28 @@ import { SessionIdContext } from "../context/SessionIdContext";
 import MovieContainer from "../components/MovieContainer";
 import styled from "styled-components";
 import { fetchRatedMovie } from "../components/FetchEverything";
+import { LoadingContext } from "../context/LoadingContext";
 // import { connect } from 'react-redux'
 
 export const RatedPage = (props) => {
   const { user } = useContext(UserContext);
   const { sessionId } = useContext(SessionIdContext);
   const [ratedList, setRatedList] = useState([]);
+  const { isloading, setLoading } = useContext(LoadingContext);
 
   useEffect(() => {
     if (user.name !== "") {
       fetchRatedMovie(user.id, sessionId).then((data) => {
+        setLoading(true);
         setRatedList(data.results);
+        setLoading(false);
       });
     }
   }, []);
 
   return (
     <div className={props.className}>
+      {isloading && <h2>Loading</h2>}
       <h2 className="title">Rated Page</h2>
       {user.name !== "" ? (
         <div className="rated-page">
