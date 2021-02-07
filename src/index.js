@@ -4,14 +4,17 @@ import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { UserProvider } from "./context/UserContext";
 import { SessionIdProvider } from "./context/SessionIdContext";
+import { FavoritProvider } from "./context/FavoriteContext";
 
 ReactDOM.render(
   <React.StrictMode>
     <UserProvider>
       <SessionIdProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <FavoritProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </FavoritProvider>
       </SessionIdProvider>
     </UserProvider>
   </React.StrictMode>,

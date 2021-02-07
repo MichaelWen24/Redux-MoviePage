@@ -13,18 +13,25 @@ export const RatedPage = (props) => {
   const [ratedList, setRatedList] = useState([]);
 
   useEffect(() => {
-      fetchRatedMovie(user.id, sessionId).then((data) => {
-          setRatedList(data.results);
-      })
+      if (user.name !== ""){
+          fetchRatedMovie(user.id, sessionId).then((data) => {
+              setRatedList(data.results);
+          })
+      }
   }, [])
 
   return (
   <div className={props.className}>
       <h2 className="title">Rated Page</h2>
       <div className="rated-page">
-        {ratedList.map(({ id, poster_path, title, vote_average, rating }) => {
+        {/* {ratedList.map(({ id, poster_path, title, vote_average, rating }) => {
             return(
                 <MovieContainer key={id} id={id} poster_path={poster_path} title={title} vote_average={vote_average} rating={rating}/>
+            );
+        })} */}
+           {ratedList.map((movie) => {
+            return(
+                <MovieContainer key={movie.id} movie={movie} />
             );
         })}
       </div>

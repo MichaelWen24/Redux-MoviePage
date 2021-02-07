@@ -4,8 +4,6 @@ export const UserContext = createContext();
 
 export const UserProvider = (props) => {
     const [user, setUser] = useState({ name:"", id:"" });
-    const [accountName, setAccountName] = useState("");
-    // const [user, setUser] = useState(null)
 
     const useUser = {
         user,

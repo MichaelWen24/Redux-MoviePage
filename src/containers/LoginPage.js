@@ -8,14 +8,20 @@ import {
   fetchAccountDetails,
 } from "../components/FetchEverything";
 import { UserContext } from "../context/UserContext";
-import { SessionIdContext} from "../context/SessionIdContext"
+import { SessionIdContext } from "../context/SessionIdContext";
+import { FavoriteContext } from "../context/FavoriteContext";
+import { fetchFavoriteMovie } from "../components/FetchEverything";
 
 const LoginPage = (props) => {
-
   const { user, setUser } = useContext(UserContext);
   const { sessionId, setSessionId } = useContext(SessionIdContext);
+  const { favoriteList, setFavoriteList } = useContext(FavoriteContext);
   const [token, setToken] = useState([]);
-  const [account, setAccount] = useState({username:"", password:"", valid:""})
+  const [account, setAccount] = useState({
+    username: "",
+    password: "",
+    valid: "",
+  });
   const history = useHistory();
 
   const handleLogin = async (e) => {
@@ -33,28 +39,8 @@ const LoginPage = (props) => {
     //valid account and token
     validAccount(accountRequestBody).then((accountData) => {
       const verifyiedAccount = accountData.success;
-      setAccount({ ...account, valid: verifyiedAccount })
-    })
-    // .then(() => {
-    //   if (account.valid === true) {
-    //     fetchSessionIdData().then((sessionID) => {
-    //       // console.log("session in main", sessionID)
-    //       setSessionId(sessionID);
-    //       localStorage.setItem("sessionId", sessionID);
-    //       fetchAccountDetails(sessionID).then((accountData) => {
-    //         // console.log("session in AD", sessionId)
-    //         // console.log("session in Local", localStorage.getItem("sessionId"))
-    //         console.log(accountData);
-    //         setUser({...user, name: accountData.name});
-    //         setUser({...user, id: accountData.id});
-    //         localStorage.setItem("user", accountData.name);
-    //         localStorage.setItem("userId", accountData.id);
-    //       }).then(() => {
-    //           history.push('/')
-    //       })
-    //     })
-    //   }
-    // })
+      setAccount({ ...account, valid: verifyiedAccount });
+    });
   };
 
   const fetchTokenData = async () => {
@@ -71,29 +57,31 @@ const LoginPage = (props) => {
       }),
     };
     const sessionIdData = await fetchSessionId(sessionRequestBody);
-    return sessionIdData.session_id
+    return sessionIdData.session_id;
   };
-
 
   useEffect(() => {
     fetchTokenData();
     if (account.valid === true) {
       fetchSessionIdData().then((sessionID) => {
-        console.log("session in main", sessionID)
+        console.log("session in main", sessionID);
         setSessionId(sessionID);
         localStorage.setItem("sessionId", sessionID);
-        fetchAccountDetails(sessionID).then((accountData) => {
-          // console.log("session in AD", sessionId)
-          // console.log("session in Local", localStorage.getItem("sessionId"))
-          // console.log(accountData);
-          setUser({...user, name: accountData.name});
-          setUser({...user, id: accountData.id});
-          localStorage.setItem("user", accountData.name);
-          localStorage.setItem("userId", accountData.id);
-        }).then(() => {
-            history.push('/')
-        })
-      })
+        fetchAccountDetails(sessionID)
+          .then((accountData) => {
+            setUser({ ...user, name: accountData.name });
+            setUser({ ...user, id: accountData.id });
+            localStorage.setItem("user", accountData.name);
+            localStorage.setItem("userId", accountData.id);
+            //onLoad
+            fetchFavoriteMovie(accountData.id, sessionID).then((data) => {
+              setFavoriteList(data.results)
+            })
+          })
+          .then(() => {
+              history.push("/");
+          });
+      });
     }
   }, [account.valid]);
 
@@ -113,7 +101,9 @@ const LoginPage = (props) => {
             type="text"
             name="username"
             className="username-input"
-            onChange={(e) => setAccount({ ...account, username: e.target.value })}
+            onChange={(e) =>
+              setAccount({ ...account, username: e.target.value })
+            }
             value={account.username}
           />
         </div>
@@ -123,7 +113,9 @@ const LoginPage = (props) => {
             type="password"
             name="password"
             className="password-input"
-            onChange={(e) => setAccount({ ...account, password: e.target.value })}
+            onChange={(e) =>
+              setAccount({ ...account, password: e.target.value })
+            }
             value={account.password}
           />
         </div>

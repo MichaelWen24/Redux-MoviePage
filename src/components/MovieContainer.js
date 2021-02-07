@@ -1,44 +1,53 @@
-import React from "react";
 import { IoIosHeartEmpty, IoMdHeart, IoIosStar } from "react-icons/io";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import { unstable_renderSubtreeIntoContainer } from "react-dom";
+import React, { useContext } from "react";
+import { FavoriteContext } from "../context/FavoriteContext";
+// import { connect } from "react-redux";
 
 const IMAGE_URL = "https://image.tmdb.org/t/p/w500";
 
+
 const MovieContainer = ({
   className,
-  id,
-  poster_path,
-  title,
-  vote_average,
-  rating
+  movie,
 }) => {
+
+  const { isFavorite, handleToggleFavorite } = useContext(FavoriteContext);
+
   return (
     <div className={className}>
-      <div className="movie-container" id={id}>
+      <div className="movie-container" id={movie.id}>
         <img
           className="movie-image"
           src={
-            poster_path !== null
-              ? `${IMAGE_URL}/${poster_path}`
+            movie.poster_path !== null
+              ? `${IMAGE_URL}/${movie.poster_path}`
               : "https://t4.ftcdn.net/jpg/02/07/87/79/360_F_207877921_BtG6ZKAVvtLyc5GWpBNEIlIxsffTtWkv.jpg"
           }
         />
-        <Link to={`movies/${id}`} style={{ textDecoration: "none" }}>
+        <Link to={`movies/${movie.id}`} style={{ textDecoration: "none" }}>
           <button className="title-button">
-            <h2 className="movie-title">{title}</h2>
+            <h2 className="movie-title">{movie.title}</h2>
           </button>
         </Link>
         <div className="icon-area">
           <div className="star-div">
             <IoIosStar className="star-icon" />
-            {rating === undefined ? <p className="vote">{vote_average}</p> : <p className="vote">{vote_average} / {rating}</p>}
-            
+            {movie.rating === undefined ? (
+              <p className="vote">{movie.vote_average}</p>
+            ) : (
+              <p className="vote">
+                {movie.vote_average} / {movie.rating}
+              </p>
+            )}
           </div>
-          <div className="heart-div">
-            <IoIosHeartEmpty className="heart-icon" />
+          <div className="heart-div" onClick={(e) => {handleToggleFavorite(movie)}}>
+            {isFavorite(movie.id) === true ? (
+              <IoMdHeart className="heart-icon" />
+            ) : (
+              <IoIosHeartEmpty className="heart-icon-empty" />
+            )}
           </div>
         </div>
       </div>
@@ -93,6 +102,11 @@ const StyledMovieContainer = styled(MovieContainer)`
   }
 
   .heart-icon {
+    color: red;
+    font-size: 20px;
+  }
+
+  .heart-icon-empty {
     color: grey;
     font-size: 20px;
   }

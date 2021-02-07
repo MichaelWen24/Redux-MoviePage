@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import { fetchMovies } from "../components/FetchEverything";
 import Button from "../components/Button";
 import styled from "styled-components";
@@ -10,6 +10,17 @@ const MoviesPage = (props) => {
   const [category, setCategory] = useState("popular");
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(500);
+
+  // movieList = {
+  //   category: {
+  //     page: {
+  //       1:[]
+  //       2:[]
+  //        ...
+  //     }
+  //   }
+  // }
+
 
   const handlePrev = () => {
     if (page > 1) {
@@ -28,8 +39,8 @@ const MoviesPage = (props) => {
       const data = await fetchMovies(category, page);
       setMovieList(data.results);
       // setMovieList(
-      //   [...movieList, 
-      //     movieList[category][page]= data.results]
+      //   [...movieList.category, 
+      //     movieList.category.page = data.results]
       // )
       setTotalPage(data.total_pages);
     };
@@ -68,9 +79,14 @@ const MoviesPage = (props) => {
         </div>
       </div>
       <div className="movie-page">
-        {movieList.map(({ id, poster_path, title, vote_average }) => {
+        {/* {movieList.map(({ id, poster_path, title, vote_average }) => {
             return(
                 <MovieContainer key={id} id={id} poster_path={poster_path} title={title} vote_average={vote_average}/>
+            );
+        })} */}
+        {movieList.map((movie) => {
+            return(
+                <MovieContainer key={movie.id} movie={movie} />
             );
         })}
       </div>
