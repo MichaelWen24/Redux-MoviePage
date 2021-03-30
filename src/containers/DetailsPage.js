@@ -46,43 +46,49 @@ const DetailsPage = (props) => {
     const movieId = props.match.params.movieId;
     setLoading(true);
     FetchDetails(movieId).then(({ id }) => {
-      fetchRatedMovie(user.id, sessionId).then(({ results }) => {
-        setLoading(false);
-        results.find((movie) => {
-          if (movie.id === id) {
-            setRating(movie.rating);
-            return;
-          }
+      if(user.id !=="" && sessionId !== "") {
+        fetchRatedMovie(user.id, sessionId).then(({ results }) => {
+          console.log(results)
+          setLoading(false);
+          results.find((movie) => {
+            if (movie.id === id) {
+              setRating(movie.rating);
+              return;
+            }
+          });
         });
-      });
+      } else {
+        setLoading(false);
+        return;
+      }
     });
   }, []);
 
   return (
     <div className={props.className}>
       {isloading && <h2>Loading</h2>}
-      <div class="detail-img">
+      <div className="detail-img">
         <img src={`${IMAGE_URL}/${details.poster_path}`} />
       </div>
-      <div class="detial-info">
+      <div className="detial-info">
         <div className="detail-title">
           <h2 className="title">{details.title}</h2>
           <br />
         </div>
         <div className="detail-data">
           <h3>Release Date:</h3>
-          <p class="release-date">{details.release_date}</p>
+          <p className="release-date">{details.release_date}</p>
         </div>
         <div className="detail-overview">
           <h3>Overview:</h3>
-          <p class="overview">{details.overview}</p>
+          <p className="overview">{details.overview}</p>
         </div>
         <div className="detail-genres">
           <h3>Genres:</h3>
-          <div class="genre-container">
+          <div className="genre-container">
             {details.genres ? (
               details.genres.map((genre) => {
-                return <label class="genre-item">{genre.name}</label>;
+                return <label className="genre-item" key={genre.id}>{genre.name}</label>;
               })
             ) : (
               <label> genres null</label>
@@ -127,11 +133,11 @@ const DetailsPage = (props) => {
         </div>
         <div className="detail-company">
           <h3>Production companies:</h3>
-          <div class="company-container">
+          <div className="company-container">
             {details.production_companies ? (
               details.production_companies.map((company) => {
                 return (
-                  <div class="company">
+                  <div className="company" key={company.id}>
                     <img
                       className="company-image"
                       src={`${IMAGE_URL}/${company.logo_path}`}
