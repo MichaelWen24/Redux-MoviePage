@@ -140,7 +140,7 @@ const StyledMoviesPage = styled(MoviesPage)`
   .movie-page {
     display: grid;
     gap: 32px;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     margin: 0px 32px 32px 32px;
   }
 `;
